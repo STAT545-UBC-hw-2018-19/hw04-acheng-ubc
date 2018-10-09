@@ -1,0 +1,15 @@
+# STAT545
+
+## Assignment 4 Repository
+
+This assignment contains two tasks:
+1. Creating a "cheatsheet" minimal guide to using **tidyr**
+2. Creating a "cheatsheet" for the family of *join* functions in dplyr, focused on a personal interst (I chose historical Jazz musicians!).
+
+### What's interesting here?
+| File | Description |
+|------|-------------|
+| README.Rmd | Quick description of the repository |
+| hw04-datawrangling-cheatsheets.Rmd | Assignment 4 R Markdown file |
+| hw04-datawrangling-cheatsheets.md | Assignment 4 Github Document |
+| hw04-datawrangling-cheatsheets_files | Folder containing graphics created by Markdown file |
