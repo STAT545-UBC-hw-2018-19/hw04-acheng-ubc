@@ -1,0 +1,121 @@
+---
+title: "STAT545 Assignment 4"
+author: "Alex"
+date: "October 9, 2018"
+output: 
+  github_document:
+    toc: true
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+```
+
+## Cheatsheet for Data Reshaping Using Tidyr
+
+Two of the most useful functions in tidyr for data reshaping are the `gather()` and `spread()` functions. Let's take a quick look at how to use them!
+
+### gather()
+
+This function is helpful when you have multiple datasets that you want to combine into a single data frame with nice clean columns. 
+
+#### Example
+
+A good practical example is from our Lecture 09, which looks at cleaning the untidy dataset that we get from haphazardly combining three lotr data files:
+
+```{r, message=FALSE}
+lotr1 <- read_csv("https://raw.githubusercontent.com/jennybc/lotr-tidy/master/data/The_Fellowship_Of_The_Ring.csv")
+lotr2 <- read_csv("https://raw.githubusercontent.com/jennybc/lotr-tidy/master/data/The_Two_Towers.csv")
+lotr3 <- read_csv("https://raw.githubusercontent.com/jennybc/lotr-tidy/master/data/The_Return_Of_The_King.csv")
+```
+
+```{r}
+untidy <- bind_rows(lotr1,lotr2,lotr3) # stack the datasets on top of each other
+untidy %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+Here we see that we have 4 columns *Film, Race, Female*, and *Male*. This isn't toooooo untidy, but it makes more sense to aggregate the Male and Female columns into one variable since they are just two halves of one larger variable that measures *Words*, and just have another variable *Gender* to retain the gender information. This makes it a lot easier for other functions to run on this dataset.
+
+We can use gather() to merge the Female and Male columns into one column called *Word*, with the Male and Female information coded in another column called *Gender*:
+
+```{r}
+tidy <- gather(untidy, key="Gender", value="Words", Female, Male)
+tidy %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+  
+```
+
+
+#### Summary Table for gather()
+
+gather(data, key, value, ...)
+
+| Argument | Description |
+|----------|-------------------------------------------------|
+| data | The untidy dataset you want to tidy up |
+| key | The name you want for the variable that will code the columns you want to aggregate together |
+| value | The column name you want for the aggregated data |
+| ... | Names of all the columns that you want to aggregate |
+
+### spread()
+
+spread() can be thought of as doing the opposite of what gather() does. If we have data in one column that we would rather have separated into multiple columns based on its value on some variable, then we use spread()!
+
+
+#### Example
+
+We can use the tidy lotr dataset from above as an example. Suppose we wanted to have a separate column of words spoken for each of the Races *Elf, Hobbit,* and *Man*. We can do this by:
+
+```{r}
+tidy %>%
+  spread(key = Race, value = Words) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+We see now that the *Words* column has been spread into three different columns, one for each of the 3 different Races! This is very useful when you wanted to quickly calculate summary statistics based on a subset of your data and you have too many different subsets to efficiently do it manually!
+ 
+#### Summary
+
+spread(data, key, value)
+
+| Argument | Description |
+|----------|-------------------------------------------------|
+| data | The dataset you want to work on |
+| key | The varaible whose values you wish to use to spread the values of another variable over |
+| value | The variable whose values you want to spread over your *key* variable |
+
+
+
+
+
+
+
+
+
+## Cheatsheet for the family of join() functions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
