@@ -96,18 +96,88 @@ spread(data, key, value)
 
 
 
-
-
-
-
-
-
 ## Cheatsheet for the family of join() functions
 
+### Data Prep
+
+As may be apparent from my first assigment, I'm really interested in jazz! In order to look at how the join() functions work, let's first prep a dataset that consists of Name, Age, Instrument, Most Prominent Era:
+
+```{r}
+jazzgreats <- "
+Name, Age, Instrument, Genre
+Oscar Peterson, 82, Piano, Swing
+Count Basie, 79, Piano, Big Band
+Miles Davis, 65, Trumpet, Modal
+John Coltrane, 40, Saxophone, Hard Bop
+Duke Ellington, 75, Piano, Big Band
+Buddy Rich, 69, Drums, Big Band
+Charlie Parker, 34, Saxophone, Bebop
+Bill Evans, 51, Piano, Modal
+Chick Corea, 77, Piano, Fusion
+Ella Fitzgerald, 79, Vocals, Swing
+Ornette Coleman, 85, Saxophone, Free Jazz
+"
+
+jazzgreats <- read_csv(jazzgreats, skip = 1) 
+
+jazzgreats %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+  
+```
+
+Great! Now suppose we have another dataset that contains different jazz genres along with the starting year for each genre:
+
+```{r}
+genre_years <- "
+Genre, Year
+Dixieland, 1920
+Swing, 1930
+Big Band, 1930
+Bebop, 1945
+Modal, 1950
+Hard Bop, 1955
+Fusion, 1970
+"
+
+genre_years <- read_csv(genre_years, skip = 1)
+
+genre_years %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+
+```
+
+The information in the `genre_years` data frame would be very useful to have in our `jazzgreats` data frame. Let's look at how we can use different join() functions to accomplish this, and how each one differs!
+
+### inner_join()
+
+inner_join(x,y) returns all rows in x that have matching values in y, then appends all applicable rows from y to x.
+
+```{r}
+inner_join(jazzgreats, genre_years) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+All entries in `jazzgreats` that have a Genre that also appears in `genre_years` have been returned. We see that with this join, we have lost Ornette Coleman from `jazzgreats` since *Free Jazz* was not a genre in `genre_years`.
 
 
+### semi_join()
 
+semi_join(x,y) is like inner_join(x,y), except at the end it returns only the rows that belonged to x.
 
+```{r}
+semi_join(jazzgreats, genre_years) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+We see that we get exactly the same result as with inner_join, except the *Years* column has not been appended to `jazzgreats`.
+
+### left_join()
+
+left_join(x,y) 
 
 
 
