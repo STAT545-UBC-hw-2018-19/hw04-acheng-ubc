@@ -6,6 +6,8 @@ This assignment contains two tasks:
 1. Creating a "cheatsheet" minimal guide to using **tidyr**
 2. Creating a "cheatsheet" for the family of *join* functions in dplyr, focused on a personal interst (I chose historical Jazz musicians!).
 
+**Note:** This time it seems to me that the .Rmd is more readable on github than the .md file.
+
 ### What's interesting here?
 | File | Description |
 |------|-------------|

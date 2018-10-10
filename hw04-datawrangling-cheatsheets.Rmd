@@ -219,7 +219,6 @@ We see that we do indeed get back every row and column from both data frames. In
 
 ### Summary of join functions
 
-Let's summarize the join functions in plain english:
 
 | Function | Description |
 |----------|-------------------------------------------------|
