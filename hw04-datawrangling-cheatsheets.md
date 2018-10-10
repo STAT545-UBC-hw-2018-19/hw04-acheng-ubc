@@ -5,12 +5,20 @@ October 9, 2018
 
 -   [Cheatsheet for Data Reshaping Using Tidyr](#cheatsheet-for-data-reshaping-using-tidyr)
     -   [gather()](#gather)
+        -   [Example](#example)
+        -   [Summary Table for gather()](#summary-table-for-gather)
     -   [spread()](#spread)
+        -   [Example](#example-1)
+        -   [Summary](#summary)
 -   [Cheatsheet for the family of join() functions](#cheatsheet-for-the-family-of-join-functions)
     -   [Data Prep](#data-prep)
-    -   [inner\_join()](#inner_join)
-    -   [semi\_join()](#semi_join)
-    -   [left\_join()](#left_join)
+    -   [Different join functions](#different-join-functions)
+        -   [inner\_join()](#inner_join)
+        -   [semi\_join()](#semi_join)
+        -   [left\_join()](#left_join)
+        -   [anti\_join()](#anti_join)
+        -   [full\_join()](#full_join)
+    -   [Summary of join functions](#summary-of-join-functions)
 
 Cheatsheet for Data Reshaping Using Tidyr
 -----------------------------------------
@@ -972,7 +980,9 @@ Fusion
 </table>
 The information in the `genre_years` data frame would be very useful to have in our `jazzgreats` data frame. Let's look at how we can use different join() functions to accomplish this, and how each one differs!
 
-### inner\_join()
+### Different join functions
+
+#### inner\_join()
 
 inner\_join(x,y) returns all rows in x that have matching values in y, then appends all applicable rows from y to x.
 
@@ -1179,7 +1189,7 @@ Swing
 </table>
 All entries in `jazzgreats` that have a Genre that also appears in `genre_years` have been returned. We see that with this join, we have lost Ornette Coleman from `jazzgreats` since *Free Jazz* was not a genre in `genre_years`.
 
-### semi\_join()
+#### semi\_join()
 
 semi\_join(x,y) is like inner\_join(x,y), except at the end it returns only the rows that belonged to x.
 
@@ -1353,6 +1363,582 @@ Swing
 </table>
 We see that we get exactly the same result as with inner\_join, except the *Years* column has not been appended to `jazzgreats`.
 
-### left\_join()
+#### left\_join()
 
-left\_join(x,y)
+left\_join(x,y) returns all rows from x with all columns from both x and y. This differs from inner\_join(x,y) in that here if there is no corresponding row for a certain value in x, we will get NAs instead of nothing at all.
+
+``` r
+left_join(genre_years, jazzgreats) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+    ## Joining, by = "Genre"
+
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Genre
+</th>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:right;">
+Age
+</th>
+<th style="text-align:left;">
+Instrument
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Dixieland
+</td>
+<td style="text-align:right;">
+1920
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Swing
+</td>
+<td style="text-align:right;">
+1930
+</td>
+<td style="text-align:left;">
+Oscar Peterson
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Swing
+</td>
+<td style="text-align:right;">
+1930
+</td>
+<td style="text-align:left;">
+Ella Fitzgerald
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:left;">
+Vocals
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Big Band
+</td>
+<td style="text-align:right;">
+1930
+</td>
+<td style="text-align:left;">
+Count Basie
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Big Band
+</td>
+<td style="text-align:right;">
+1930
+</td>
+<td style="text-align:left;">
+Duke Ellington
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Big Band
+</td>
+<td style="text-align:right;">
+1930
+</td>
+<td style="text-align:left;">
+Buddy Rich
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:left;">
+Drums
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bebop
+</td>
+<td style="text-align:right;">
+1945
+</td>
+<td style="text-align:left;">
+Charlie Parker
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+Saxophone
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Modal
+</td>
+<td style="text-align:right;">
+1950
+</td>
+<td style="text-align:left;">
+Miles Davis
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:left;">
+Trumpet
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Modal
+</td>
+<td style="text-align:right;">
+1950
+</td>
+<td style="text-align:left;">
+Bill Evans
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hard Bop
+</td>
+<td style="text-align:right;">
+1955
+</td>
+<td style="text-align:left;">
+John Coltrane
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:left;">
+Saxophone
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fusion
+</td>
+<td style="text-align:right;">
+1970
+</td>
+<td style="text-align:left;">
+Chick Corea
+</td>
+<td style="text-align:right;">
+77
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+</tr>
+</tbody>
+</table>
+We see that even though there were no artists in `jazzgreats` that had Dixieland as their most prominent genre, we still retain *Dixieland* as a variable since it was in `x = genre_years`
+
+#### anti\_join()
+
+anti\_join(x,y) keeps all rows from x that do not have matching values in y.
+
+``` r
+anti_join(jazzgreats, genre_years) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+    ## Joining, by = "Genre"
+
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:right;">
+Age
+</th>
+<th style="text-align:left;">
+Instrument
+</th>
+<th style="text-align:left;">
+Genre
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Ornette Coleman
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:left;">
+Saxophone
+</td>
+<td style="text-align:left;">
+Free Jazz
+</td>
+</tr>
+</tbody>
+</table>
+``` r
+anti_join(genre_years, jazzgreats) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+    ## Joining, by = "Genre"
+
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Genre
+</th>
+<th style="text-align:right;">
+Year
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Dixieland
+</td>
+<td style="text-align:right;">
+1920
+</td>
+</tr>
+</tbody>
+</table>
+We see that we get different results depending on which order we put `jazzgreats` and `genre_years`. This is because each dataset has one row that does not have matching values in the other dataset. With `x = jazzgreats` we see that we are left with Ornette Coleman, since his genre of *Free Jazz* is not found in `genre_years`. With `x = genre_years` we are left with Dixieland, since *Dixieland* is the only genre not found in `jazzgreats`.
+
+#### full\_join()
+
+full\_join(x,y) returns all row and columns from both x and y. This basically aggregates all data from both data frames x and y. NAs are added where there is no matching data.
+
+``` r
+full_join(jazzgreats, genre_years) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+    ## Joining, by = "Genre"
+
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:right;">
+Age
+</th>
+<th style="text-align:left;">
+Instrument
+</th>
+<th style="text-align:left;">
+Genre
+</th>
+<th style="text-align:right;">
+Year
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Oscar Peterson
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+<td style="text-align:left;">
+Swing
+</td>
+<td style="text-align:right;">
+1930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Count Basie
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+<td style="text-align:left;">
+Big Band
+</td>
+<td style="text-align:right;">
+1930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Miles Davis
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:left;">
+Trumpet
+</td>
+<td style="text-align:left;">
+Modal
+</td>
+<td style="text-align:right;">
+1950
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+John Coltrane
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:left;">
+Saxophone
+</td>
+<td style="text-align:left;">
+Hard Bop
+</td>
+<td style="text-align:right;">
+1955
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Duke Ellington
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+<td style="text-align:left;">
+Big Band
+</td>
+<td style="text-align:right;">
+1930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Buddy Rich
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:left;">
+Drums
+</td>
+<td style="text-align:left;">
+Big Band
+</td>
+<td style="text-align:right;">
+1930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Charlie Parker
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+Saxophone
+</td>
+<td style="text-align:left;">
+Bebop
+</td>
+<td style="text-align:right;">
+1945
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bill Evans
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+<td style="text-align:left;">
+Modal
+</td>
+<td style="text-align:right;">
+1950
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chick Corea
+</td>
+<td style="text-align:right;">
+77
+</td>
+<td style="text-align:left;">
+Piano
+</td>
+<td style="text-align:left;">
+Fusion
+</td>
+<td style="text-align:right;">
+1970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ella Fitzgerald
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:left;">
+Vocals
+</td>
+<td style="text-align:left;">
+Swing
+</td>
+<td style="text-align:right;">
+1930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ornette Coleman
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:left;">
+Saxophone
+</td>
+<td style="text-align:left;">
+Free Jazz
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Dixieland
+</td>
+<td style="text-align:right;">
+1920
+</td>
+</tr>
+</tbody>
+</table>
+We see that we do indeed get back every row and column from both data frames. In the cases of *Ornette Coleman* from `jazzgreats` and *Dixieland* from `genre_years`, we see that NAs have been filled in.
+
+### Summary of join functions
+
+<table style="width:85%;">
+<colgroup>
+<col width="15%" />
+<col width="69%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>inner_join(x,y)</td>
+<td>Return all rows from x that have matching values in y, along with the respective data from every column in y</td>
+</tr>
+<tr class="even">
+<td>semi_join(x,y)</td>
+<td>Same as inner_join(x,y) but only returns data from x at the end</td>
+</tr>
+<tr class="odd">
+<td>left_join(x,y)</td>
+<td>Similar to inner_join(x,y), but instead of omitting rows in y that do not have matching rows in x, we create a new row with NAs as needed</td>
+</tr>
+<tr class="even">
+<td>anti_join(x,y)</td>
+<td>Returns all rows in x that do not have matching rows in y</td>
+</tr>
+<tr class="odd">
+<td>full_join(x,y)</td>
+<td>Similar to a left_join(x,y), but this keeps all data from all rows and columns in both x and y, then fills in NAs as needed</td>
+</tr>
+</tbody>
+</table>

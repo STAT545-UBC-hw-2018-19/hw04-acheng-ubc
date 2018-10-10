@@ -5,6 +5,7 @@ date: "October 9, 2018"
 output: 
   github_document:
     toc: true
+    toc_depth: 4
 ---
 
 ```{r setup, include=FALSE, warning=FALSE}
@@ -150,7 +151,8 @@ genre_years %>%
 
 The information in the `genre_years` data frame would be very useful to have in our `jazzgreats` data frame. Let's look at how we can use different join() functions to accomplish this, and how each one differs!
 
-### inner_join()
+### Different join functions
+#### inner_join()
 
 inner_join(x,y) returns all rows in x that have matching values in y, then appends all applicable rows from y to x.
 
@@ -163,7 +165,7 @@ inner_join(jazzgreats, genre_years) %>%
 All entries in `jazzgreats` that have a Genre that also appears in `genre_years` have been returned. We see that with this join, we have lost Ornette Coleman from `jazzgreats` since *Free Jazz* was not a genre in `genre_years`.
 
 
-### semi_join()
+#### semi_join()
 
 semi_join(x,y) is like inner_join(x,y), except at the end it returns only the rows that belonged to x.
 
@@ -175,13 +177,57 @@ semi_join(jazzgreats, genre_years) %>%
 
 We see that we get exactly the same result as with inner_join, except the *Years* column has not been appended to `jazzgreats`.
 
-### left_join()
+#### left_join()
 
-left_join(x,y) 
+left_join(x,y) returns all rows from x with all columns from both x and y. This differs from inner_join(x,y) in that here if there is no corresponding row for a certain value in x, we will get NAs instead of nothing at all.
 
+```{r}
+left_join(genre_years, jazzgreats) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
 
+We see that even though there were no artists in `jazzgreats` that had Dixieland as their most prominent genre, we still retain *Dixieland* as a variable since it was in `x = genre_years`
 
+#### anti_join()
 
+anti_join(x,y) keeps all rows from x that do not have matching values in y.
+
+```{r}
+anti_join(jazzgreats, genre_years) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+
+anti_join(genre_years, jazzgreats) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+We see that we get different results depending on which order we put `jazzgreats` and `genre_years`. This is because each dataset has one row that does not have matching values in the other dataset. With `x = jazzgreats` we see that we are left with Ornette Coleman, since his genre of *Free Jazz* is not found in `genre_years`. With `x = genre_years` we are left with Dixieland, since *Dixieland* is the only genre not found in `jazzgreats`.
+
+#### full_join()
+
+full_join(x,y) returns all row and columns from both x and y. This basically aggregates all data from both data frames x and y. NAs are added where there is no matching data.
+
+```{r}
+full_join(jazzgreats, genre_years) %>%
+  kable("html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", full_width = F))
+```
+
+We see that we do indeed get back every row and column from both data frames. In the cases of *Ornette Coleman* from `jazzgreats` and *Dixieland* from `genre_years`, we see that NAs have been filled in.
+
+### Summary of join functions
+
+Let's summarize the join functions in plain english:
+
+| Function | Description |
+|----------|-------------------------------------------------|
+| inner_join(x,y) | Return all rows from x that have matching values in y, along with the respective data from every column in y |
+| semi_join(x,y) | Same as inner_join(x,y) but only returns data from x at the end |
+| left_join(x,y) | Similar to inner_join(x,y), but instead of omitting rows in y that do not have matching rows in x, we create a new row with NAs as needed |
+| anti_join(x,y) | Returns all rows in x that do not have matching rows in y |
+| full_join(x,y) | Similar to a left_join(x,y), but this keeps all data from all rows and columns in both x and y, then fills in NAs as needed |
 
 
 
